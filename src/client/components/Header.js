@@ -9,7 +9,7 @@ export default function Header() {
                 <Link to="/">MealShare</Link>
             </div>
             <Link to="/meals">Discover meals</Link>
-            <Link to="/">Share Meal</Link>
+            <a href="#addMealForm">Share Meal</a>
         </nav>
     </header>
 }

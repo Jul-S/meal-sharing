@@ -1,39 +1,73 @@
-import React from "react";
-import DatePicker from 'react-datepicker';
+import React, { useState } from "react";
+
 export default function AddReservationForm(props) {
+    const [formData, setFormData] = useState({
+        number_of_guests: 0,
+        contact_phonenumber: "",
+        contact_name: "",
+        contact_email: ""
+    });
+    const [formError, setFormError] = useState(false);
 
-    function addReservation() {
-
+    function addReservation(event) {
+        event.preventDefault();
+        if (Object.values(formData).some(v => !v)) {
+            setFormError(true);
+            return;
+        }
+        setFormError(false);
+        props.onSubmit("reservations", formData);
     }
 
-    return <form onSubmit={addReservation}>
-        {/* <div>
-            <label htmlFor="date">Deadline</label>
-            <DatePicker id="date"
-                selected={props.date}
-                dateFormat='yyyy-MM-dd'
-                onChange={(date) => props.onChange(date)}
-                minDate={props.date} />
-        </div> */}
+    function handleChange(event) {
+        if (event.target.name === "contact_phonenumber"
+            && isNaN(Number(event.target.value))
+            || Number(event.target.value) < 0) return;
+        setFormData({
+            ...formData,
+            [event.target.name]: event.target.value
+        });
+    }
+
+    console.log(props);
+
+    return <form onSubmit={addReservation} >
         <h3>Book this meal now</h3>
+        {formError && <span style={{ color: 'red' }}>Fill in all fields to submit</span>}
         <label htmlFor="name">Name</label>
         <input id="name"
+            name="contact_name"
             type="text"
+            maxLength="25"
             placeholder="Enter your full name"
-            value={props.inputValue}
-            onChange={props.onChange} />
+            value={formData.contact_name}
+            onChange={handleChange} />
         <label htmlFor="phonenumber">Phonenumber</label>
         <input id="phonenumber"
-            type="text"
+            type="tel"
+            name="contact_phonenumber"
+            maxLength="25"
             placeholder="Enter your phone number"
-            value={props.inputValue}
-            onChange={props.onChange} />
+            value={formData.contact_phonenumber}
+            onChange={handleChange} />
         <label htmlFor="email">Email</label>
         <input id="email"
-            type="text"
+            type="email"
+            name="contact_email"
+            maxLength="25"
             placeholder="Enter your email"
-            value={props.inputValue}
-            onChange={props.onChange} />
+            value={formData.contact_email}
+            onChange={handleChange} />
+        <label htmlFor="number_of_guests">Number of Guests</label>
+        <select id="number_of_guests"
+            name="number_of_guests"
+            placeholder="1"
+            value={formData.number_of_guests}
+            onChange={handleChange}>
+            {new Array(props.availableReservation).fill().map((i, index) => {
+                return <option key={index} value={index + 1}>{index + 1}</option>
+            })}
+        </select>
         <input type="submit" value="Book Meal" disabled={false} />
     </form>
 }

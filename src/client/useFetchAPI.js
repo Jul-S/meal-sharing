@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-export default function useFetchAPI(url) {
+export default function useFetchAPI(url, dependOn) {
     const [data, setData] = useState();
     const [isLoading, setIsLoading] = useState(true);
 
@@ -12,7 +12,7 @@ export default function useFetchAPI(url) {
                 setIsLoading(false);
             });
 
-    }, []);
+    }, [dependOn]);
 
     return { data, isLoading };
 }

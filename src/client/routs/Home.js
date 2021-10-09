@@ -7,9 +7,9 @@ import { Link } from "react-router-dom";
 import AddMealForm from "../components/AddMealForm";
 
 export default function Home() {
-    const [formMessage, setMessage] = useState('');
-
-    const fetchResult = useFetchAPI(`/meals?createdAfter=${new Date()}&availableReservations=true`);
+    const [mealAdded, setMealAdded] = useState('');
+    const fetchReviews = useFetchAPI(`/reviews?limit=3`);
+    const fetchUpcomingMeals = useFetchAPI(`/meals?dateAfter=${new Date().toISOString().slice(0, 10)}&limit=3&availableReservations=true`, mealAdded);
 
     function handleAddMealFormSubmit(data) {
         async function postRequest() {
@@ -19,7 +19,7 @@ export default function Home() {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
                 });
-                console.log(req);
+                if (req.ok) setMealAdded(true);
                 const result = await req.json();
                 console.log(result);
             } catch (e) {
@@ -35,9 +35,10 @@ export default function Home() {
             <Link className="btn-link bgn-green" to="/meals">Discover Meals</Link>
         </WelcomeImage>
         <h2 className="centered-text">Upcoming meals! Booking still available!</h2>
-        <MealList isLoading={fetchResult.isLoading} meals={fetchResult.data} />
-        <ReviewsList />
-        {formMessage && <p>{formMessage}</p>}
+        <MealList isLoading={fetchUpcomingMeals.isLoading} meals={fetchUpcomingMeals.data} availableMeals={fetchUpcomingMeals.data?.map(m => m.id)} />
+        <h2>Lates Reviews</h2>
+        {fetchReviews.data && <ReviewsList className="centered-text bgn-yellow" fetchResult={fetchReviews} />}
+        {mealAdded && <p style={{ color: '#9ACD32' }}>Your meal succesfully added</p>}
         <AddMealForm onSubmit={handleAddMealFormSubmit} />
     </main >
 }
