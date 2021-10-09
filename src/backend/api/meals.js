@@ -48,15 +48,19 @@ router.get("/", async (request, response) => {
 });
 
 async function getMealsWithAvailableReservations() {
-  const filteredIds = await knex('meal')
-    .select('meal.id', 'meal.max_reservations')
-    .sum({ 'total_reservations': 'reservation.number_of_guests' })
-    .join('reservation', { 'meal.id': 'reservation.meal_id' })
-    .groupBy('meal.id')
-    .having(knex.raw('total_reservations < meal.max_reservations'));
-  console.log("filtered", filteredIds);
-  const meals = await knex("meal");
-  return meals.filter(m1 => filteredIds.some(m2 => m2.id === m1.id));
+  try {
+    const filteredIds = await knex
+      .select(knex.raw("COALESCE(SUM(reservation.number_of_guests), 0) AS total_reservations"))
+      .select('meal.id', 'meal.max_reservations')
+      .from('meal')
+      .leftJoin('reservation', { 'meal.id': 'reservation.meal_id' })
+      .groupBy('meal.id')
+      .having(knex.raw('total_reservations < meal.max_reservations'))
+    const meals = await knex("meal");
+    return meals.filter(m1 => filteredIds.some(m2 => m2.id === m1.id));
+  } catch (e) {
+    console.log(e);
+  }
 }
 
 router.get("/:id", async (request, response) => {
@@ -80,7 +84,7 @@ router.post("/", async (request, response) => {
     );
 
   } catch (error) {
-    console.log(error);
+    throw error;
   }
 });
 
