@@ -80,7 +80,7 @@ router.post("/", async (request, response) => {
     );
 
   } catch (error) {
-    throw error;
+    console.log(error);
   }
 });
 
