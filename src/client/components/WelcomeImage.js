@@ -1,9 +1,9 @@
 import React from "react";
-import welcome_background from '../assets/images/welcome_background.png';
+import welcome from '../assets/images/welcome.png';
 
 export default function WelcomeImage(props) {
     return <div className="welcome-banner">
-        <img src={welcome_background} alt="People sharing meal" />
+        <img src={welcome} alt="People sharing meal" />
         <div className="title-content">
             <div className="bgn-yellow">
                 <h1>{props.title}</h1>

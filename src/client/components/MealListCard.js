@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import meal from '../assets/images/meal.png';
 
 export default function MealListCard(props) {
     const [mealAvailable, setMealAvailable] = useState(false);
@@ -10,7 +11,7 @@ export default function MealListCard(props) {
 
     return <div className="card">
         <h3><b>{props.meal.title}</b></h3>
-        <img src="meal_default.png" alt="Meal image" style={{ width: "100%" }} />
+        <img src={meal} alt="Meal image" style={{ width: "100%" }} />
         <div className="container">
             <p>{props.meal.description}</p>
             <p>Where: {props.meal.location}</p>

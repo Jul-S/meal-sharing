@@ -1,9 +1,9 @@
 import React from "react";
-import meal_default from '../assets/images/meal_default.png';
+import meal from '../assets/images/meal.png';
 
 export default function MealInfo(props) {
     return <div>
-        <img src={meal_default} alt="Meal image" style={{ width: "100%" }} />
+        <img src={meal} alt="Meal image" style={{ width: "100%" }} />
         <h3><b>{props.meal.title}</b></h3>
         <div>
             <p>{props.meal.description}</p>
