@@ -13,7 +13,7 @@ const cors = require("cors");
 // For week4 no need to look into this!
 // Serve the built client html
 app.use(express.static(buildPath));
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Parse URL-encoded bodies (as sent by HTML forms)
 app.use(express.urlencoded({ extended: true }));
