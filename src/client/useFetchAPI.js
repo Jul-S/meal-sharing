@@ -5,7 +5,7 @@ export default function useFetchAPI(url, dependOn) {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        fetch(process.env.API_PATH + url)
+        fetch("/api" + url)
             .then(response => response.json())
             .then(data => {
                 setData(data)
