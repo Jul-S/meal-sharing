@@ -5,7 +5,7 @@ export default function Header() {
     return <header>
         <nav>
             <div>
-                <img src="src/client/assets/images/logo.jpg" alt="logo" id="logo" />
+                <img src="./src/client/assets/images/logo.png" alt="logo" id="logo" />
                 <Link to="/">MealShare</Link>
             </div>
             <Link to="/meals">Discover meals</Link>

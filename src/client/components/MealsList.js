@@ -7,7 +7,6 @@ export default function MealList(props) {
     useEffect(() => {
         setAvailableList(props.availableMeals);
     });
-    console.log(props.availableMeals);
     return <main>
         <ul className="card-list">
             {props.isLoading ? <p>Loading meals...</p> :

@@ -4,8 +4,6 @@ import { Link } from "react-router-dom";
 export default function MealListCard(props) {
     const [mealAvailable, setMealAvailable] = useState(false);
 
-    console.log(props.available);
-
     useEffect(() => {
         if (new Date(props.meal.when) > new Date() && props.available) { setMealAvailable(true) };
     })
