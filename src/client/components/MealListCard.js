@@ -10,7 +10,7 @@ export default function MealListCard(props) {
 
     return <div className="card">
         <h3><b>{props.meal.title}</b></h3>
-        <img src="src/client/assets/images/meal_default.png" alt="Meal image" style={{ width: "100%" }} />
+        <img src="public/meal_default.png" alt="Meal image" style={{ width: "100%" }} />
         <div className="container">
             <p>{props.meal.description}</p>
             <p>Where: {props.meal.location}</p>

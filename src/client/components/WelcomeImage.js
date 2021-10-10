@@ -2,7 +2,7 @@ import React from "react";
 
 export default function WelcomeImage(props) {
     return <div className="welcome-banner">
-        <img src="src/client/assets/images/welcome_background.png" alt="People sharing meal" />
+        <img src="public/welcome_background.png" alt="People sharing meal" />
         <div className="title-content">
             <div className="bgn-yellow">
                 <h1>{props.title}</h1>
