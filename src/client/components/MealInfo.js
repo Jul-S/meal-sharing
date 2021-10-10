@@ -1,15 +1,16 @@
 import React from "react";
-import meal from '../assets/images/meal.png';
 
 export default function MealInfo(props) {
     return <div>
-        <img src={meal} alt="Meal image" style={{ width: "100%" }} />
         <h3><b>{props.meal.title}</b></h3>
         <div>
             <p>{props.meal.description}</p>
-            <p>Where: {props.meal.location}</p>
-            <p>When: {props.meal.when.slice(0, 10)}</p>
-            <p>Price: {Number(props.meal.price).toFixed(0)} DKK</p>
+            <div className="flex">
+                <p><strong>Where:</strong> {props.meal.location}</p>
+                <p><strong>When:</strong> {props.meal.when.slice(0, 10)}</p>
+            </div>
+            <p><strong>Guests:</strong> {props.availableReservation} available /{props.meal.max_reservations} total</p>
+            <p><strong>Price:</strong> {Number(props.meal.price).toFixed(0)} DKK</p>
         </div>
     </div>
 }

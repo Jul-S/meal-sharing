@@ -3,6 +3,7 @@ import { RatingView } from 'react-simple-star-rating';
 
 export default function ReviewsList(props) {
     const fetchResult = props.fetchResult;
+    console.log(fetchResult);
     return <div className={props.className}>
         <ul>
             {fetchResult.isLoading ? <p>Loading reviews...</p> :

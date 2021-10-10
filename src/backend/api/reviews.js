@@ -16,11 +16,11 @@ router.get("/", async (request, response) => {
                 return response.send(400).json({ error: "Invalid query param" });
             }
 
-            let reviews = request.query.meal_id ? await knex("review").where({ meal_id: request.query.meal_id }) : undefined;
+            let reviewsById = request.query.meal_id ? await knex("review").where({ meal_id: Number(request.query.meal_id) }) : undefined;
 
-            reviews = request.query.limit ? await knex("review").limit(request.query.limit) : undefined;
+            let reviewsLimited = request.query.limit ? await knex("review").limit(request.query.limit) : undefined;
 
-            response.send(reviews);
+            reviewsById ? response.send(reviewsById) : response.send(reviewsLimited);
         } else {
             const reviews = await knex("review");
             response.send(reviews);

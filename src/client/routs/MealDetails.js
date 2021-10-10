@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import AddReservationForm from "../components/AddReservationForm";
 import AddReviewForm from "../components/AddReviewForm";
 import ReviewsList from "../components/ReviewsList";
+import meal from '../assets/images/meal.png';
 
 export default function MealDetails(props) {
     const params = useParams();
@@ -57,9 +58,7 @@ export default function MealDetails(props) {
             <p>Please wait...</p> :
             <div className="flex">
                 <div className="flex-60">
-                    <MealInfo meal={fetchMeal.data[0]} />
-                    <h3>Reviews</h3>
-                    <ReviewsList fetchResult={fetchReviews} />
+                    <img src={meal} alt="Meal image" style={{ width: "100%" }} />
                 </div>
                 <div className="flex-40">
                     {props.location.state.mealAvailable ?
@@ -71,6 +70,11 @@ export default function MealDetails(props) {
                             <AddReviewForm onSubmit={handleSubmit} /></>}
                 </div>
             </div>
+        }
+        {fetchMeal.isLoading ? <p>Please wait...</p> : <>
+            <MealInfo meal={fetchMeal.data[0]} availableReservation={availableReservation} />
+            <h3>Reviews</h3>
+            <ReviewsList fetchResult={fetchReviews} /> </>
         }
     </main >
 }
