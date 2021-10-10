@@ -5,7 +5,7 @@ export default function ReviewsList(props) {
     const fetchResult = props.fetchResult;
     return <div className={props.className}>
         <ul>
-            {fetchResult.isLoading ? <p>Loading meals...</p> :
+            {fetchResult.isLoading ? <p>Loading reviews...</p> :
                 fetchResult.data.length > 0 ?
                     fetchResult.data?.map((review) => {
                         return <li key={review.id}>
