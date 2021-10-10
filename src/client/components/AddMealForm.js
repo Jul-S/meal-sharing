@@ -22,6 +22,16 @@ export default function AddMealForm(props) {
             "created_date": formData.created_date.toISOString().slice(0, 10)
         }
         props.onSubmit(meal);
+        setFormData({
+            title: "",
+            description: "",
+            location: "",
+            when: new Date(),
+            max_reservations: "",
+            price: "",
+            created_date: new Date()
+        });
+
     }
 
     function handleChange(event) {

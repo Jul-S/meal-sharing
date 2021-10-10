@@ -17,6 +17,12 @@ export default function AddReservationForm(props) {
         }
         setFormError(false);
         props.onSubmit("reservations", formData);
+        setFormData({
+            number_of_guests: 0,
+            contact_phonenumber: "",
+            contact_name: "",
+            contact_email: ""
+        });
     }
 
     function handleChange(event) {

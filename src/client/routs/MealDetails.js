@@ -39,7 +39,7 @@ export default function MealDetails(props) {
                 if (req.ok) { setFormSubmited(true); }
                 else { setFormSubmited(false); }
                 const result = await req.json();
-                alert(result);
+                console.log(result);
             } catch (e) {
                 setFormSubmited(false);
                 throw e;

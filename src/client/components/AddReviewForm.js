@@ -17,6 +17,11 @@ export default function AddReviewForm(props) {
         }
         setFormError(false);
         props.onSubmit("reviews", formData);
+        setFormData({
+            title: "",
+            description: "",
+            stars: 0
+        });
     }
 
     function handleChange(event) {
