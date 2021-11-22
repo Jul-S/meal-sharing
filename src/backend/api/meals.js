@@ -6,7 +6,7 @@ router.get("/", async (request, response) => {
   try {
 
     if (Object.keys(request.query).length !== 0) {
-      const suportedQuerry = ["maxPrice", "title", "availableReservations", "createdAfter", "limit"];
+      const suportedQuerry = ["maxPrice", "title", "availableReservations", "dateAfter", "limit"];
 
       for (const param of Object.keys(request.query)) {
         if (suportedQuerry.indexOf(param) === -1)
@@ -16,11 +16,11 @@ router.get("/", async (request, response) => {
       const maxPrice = request.query.maxPrice;
       const availableReservations = request.query.availableReservations;
       const title = request.query.title;
-      const createdAfter = request.query.createdAfter;
+      const dateAfter = request.query.dateAfter;
       const limit = request.query.limit;
 
       if (maxPrice && isNaN(parseInt(maxPrice))
-        || createdAfter && isNaN(Date.parse(createdAfter))
+        || dateAfter && isNaN(Date.parse(dateAfter))
         || limit && isNaN(parseInt(limit))
       ) {
         return response.send(400).json({ error: "Invalid query param" });
@@ -31,8 +31,8 @@ router.get("/", async (request, response) => {
 
       let filteredMeals = meals.filter(m =>
         (maxPrice ? (m.price < parseInt(maxPrice)) : true) &&
-        (title ? (m.title.includes(title)) : true) &&
-        (createdAfter ? (new Date(m.createdAt) > Date.parse(createdAfter)) : true)
+        (title ? (m.title.toUpperCase().includes(title.toUpperCase())) : true) &&
+        (dateAfter ? (new Date(m.when) > Date.parse(dateAfter)) : true)
       );
 
       filteredMeals = limit ? filteredMeals.slice(0, parseInt(limit)) : filteredMeals;
@@ -48,15 +48,19 @@ router.get("/", async (request, response) => {
 });
 
 async function getMealsWithAvailableReservations() {
-  const filteredIds = await knex('meal')
-    .select('meal.id', 'meal.max_reservations')
-    .sum({ 'total_reservations': 'reservation.number_of_guests' })
-    .join('reservation', { 'meal.id': 'reservation.meal_id' })
-    .groupBy('meal.id')
-    .having(knex.raw('total_reservations < meal.max_reservations'));
-  console.log("filtered", filteredIds);
-  const meals = await knex("meal");
-  return meals.filter(m1 => filteredIds.some(m2 => m2.id === m1.id));
+  try {
+    const filteredIds = await knex
+      .select(knex.raw("COALESCE(SUM(reservation.number_of_guests), 0) AS total_reservations"))
+      .select('meal.id', 'meal.max_reservations')
+      .from('meal')
+      .leftJoin('reservation', { 'meal.id': 'reservation.meal_id' })
+      .groupBy('meal.id')
+      .having(knex.raw('total_reservations < meal.max_reservations'))
+    const meals = await knex("meal");
+    return meals.filter(m1 => filteredIds.some(m2 => m2.id === m1.id));
+  } catch (e) {
+    console.log(e);
+  }
 }
 
 router.get("/:id", async (request, response) => {

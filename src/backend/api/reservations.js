@@ -4,8 +4,18 @@ const knex = require("../database");
 
 router.get("/", async (request, response) => {
     try {
-        const reservations = await knex("reservation");
-        response.send(reservations);
+        if (Object.keys(request.query).length !== 0) {
+            const suportedQuerry = ["meal_id"];
+            for (const param of Object.keys(request.query)) {
+                if (suportedQuerry.indexOf(param) === -1)
+                    return response.send(400).json({ error: "This querry param is not supported" });
+            }
+            const reservations = await knex("reservation").where({ meal_id: request.query.meal_id });
+            response.send(reservations);
+        } else {
+            const reservations = await knex("reservation");
+            response.send(reservations);
+        }
     } catch (error) {
         throw error;
     }

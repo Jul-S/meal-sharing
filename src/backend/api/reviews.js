@@ -4,8 +4,27 @@ const knex = require("../database");
 
 router.get("/", async (request, response) => {
     try {
-        const reviews = await knex("review");
-        response.send(reviews);
+        if (Object.keys(request.query).length !== 0) {
+            const suportedQuerry = ["meal_id", "limit"];
+            for (const param of Object.keys(request.query)) {
+                if (suportedQuerry.indexOf(param) === -1)
+                    return response.send(400).json({ error: "This querry param is not supported" });
+            }
+
+            if (request.query.meal_id && isNaN(Number(request.query.meal_id))
+                || request.query.limit && isNaN(Number(request.query.limit))) {
+                return response.send(400).json({ error: "Invalid query param" });
+            }
+
+            let reviewsById = request.query.meal_id ? await knex("review").where({ meal_id: Number(request.query.meal_id) }) : undefined;
+
+            let reviewsLimited = request.query.limit ? await knex("review").limit(request.query.limit) : undefined;
+
+            reviewsById ? response.send(reviewsById) : response.send(reviewsLimited);
+        } else {
+            const reviews = await knex("review");
+            response.send(reviews);
+        }
     } catch (error) {
         throw error;
     }
